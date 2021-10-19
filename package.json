@@ -1,6 +1,6 @@
 {
   "name": "inkdrop-keymap",
-  "version": "8.2.15",
+  "version": "8.2.0",
   "description": "Inkdrop's DOM-aware keymap module",
   "main": "./lib/keymap-manager",
   "scripts": {
@@ -24,9 +24,8 @@
   "dependencies": {
     "clear-cut": "^2",
     "emissary": "^1.1.0",
-    "event-kit": "^1.0.0",
-    "fs-plus": "^3.0.0",
-    "grim": "^1.2.1",
+    "event-kit": "^2.5.3",
+    "fs-plus": "^3.1.1",
     "keyboard-layout": "2.0.17",
     "property-accessors": "^1",
     "season": "^6.0.2"
