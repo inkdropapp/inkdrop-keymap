@@ -13,7 +13,7 @@ describe "KeymapManager", ->
 
   beforeEach ->
     mockProcessPlatform('darwin')
-    keymapManager = new KeymapManager({ pathWatcher })
+    keymapManager = new KeymapManager({pathWatcher})
 
   afterEach ->
     keymapManager.destroy()
