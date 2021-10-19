@@ -1,7 +1,7 @@
 {
-  "name": "atom-keymap",
+  "name": "inkdrop-keymap",
   "version": "8.2.15",
-  "description": "Atom's DOM-aware keymap module",
+  "description": "Inkdrop's DOM-aware keymap module",
   "main": "./lib/keymap-manager",
   "scripts": {
     "prepare": "npm run clean && npm run compile && npm run lint && npm run atomdoc",
@@ -15,10 +15,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/atom/atom-keymap.git"
+    "url": "https://github.com/inkdropapp/inkdrop-keymap.git"
   },
   "bugs": {
-    "url": "https://github.com/atom/atom-keymap/issues"
+    "url": "https://github.com/inkdropapp/inkdrop-keymap/issues"
   },
   "license": "MIT",
   "dependencies": {
@@ -28,7 +28,6 @@
     "fs-plus": "^3.0.0",
     "grim": "^1.2.1",
     "keyboard-layout": "2.0.17",
-    "pathwatcher": "^8.0.0",
     "property-accessors": "^1",
     "season": "^6.0.2"
   },
@@ -55,6 +54,7 @@
     "grunt-contrib-coffee": "0.9.0",
     "grunt-shell": "0.2.2",
     "lolex": "1.4.0",
+    "pathwatcher": "^8.1.2",
     "rimraf": "2.2.2",
     "sinon": "1.17.3",
     "space-pencil": "0.3.0",
