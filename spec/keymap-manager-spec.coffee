@@ -4,6 +4,7 @@ fs = require 'fs-plus'
 path = require 'path'
 temp = require 'temp'
 KeyboardLayout = require('keyboard-layout')
+pathWatcher = require('pathwatcher')
 KeymapManager = require '../src/keymap-manager'
 {appendContent, stub, getFakeClock, mockProcessPlatform, buildKeydownEvent, buildKeyupEvent} = require './helpers/helpers'
 
@@ -12,7 +13,7 @@ describe "KeymapManager", ->
 
   beforeEach ->
     mockProcessPlatform('darwin')
-    keymapManager = new KeymapManager
+    keymapManager = new KeymapManager({ pathWatcher })
 
   afterEach ->
     keymapManager.destroy()

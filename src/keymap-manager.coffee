@@ -2,7 +2,6 @@ CSON = require 'season'
 fs = require 'fs-plus'
 {isSelectorValid} = require 'clear-cut'
 path = require 'path'
-{File} = require 'pathwatcher'
 {Emitter, Disposable, CompositeDisposable} = require 'event-kit'
 {KeyBinding, MATCH_TYPES} = require './key-binding'
 CommandEvent = require './command-event'
@@ -109,6 +108,7 @@ class KeymapManager
   #   following properties are also supported:
   #   * `defaultTarget` This will be used as the target of events whose target
   #     is `document.body` to allow for a catch-all element when nothing is focused.
+  #   * `pathWatcher`: The instance of pathwatcher module
   constructor: (options={}) ->
     @[key] = value for key, value of options
     @watchSubscriptions = {}
@@ -352,7 +352,7 @@ class KeymapManager
   #     specificity.
   watchKeymap: (filePath, options) ->
     if not @watchSubscriptions[filePath]? or @watchSubscriptions[filePath].disposed
-      file = new File(filePath)
+      file = new @pathWatcher.File(filePath)
       reloadKeymap = => @reloadKeymap(filePath, options)
       @watchSubscriptions[filePath] = new CompositeDisposable(
         file.onDidChange(reloadKeymap)

@@ -1,14 +1,15 @@
-# Atom keymap
+# Inkdrop keymap
 [![Build Status](https://travis-ci.org/atom/atom-keymap.svg?branch=master)](https://travis-ci.org/atom/atom-keymap)
 [![Dependency Status](https://david-dm.org/atom/atom-keymap.svg)](https://david-dm.org/atom/atom-keymap)
 
-Atom's DOM-aware keymap module
+Inkdrop's DOM-aware keymap module
 
 ```js
+var pathWatcher = require('pathwatcher')
 var KeymapManager, keymaps;
-KeymapManager = require('atom-keymap')
+KeymapManager = require('inkdrop-keymap')
 
-keymaps = new KeymapManager
+keymaps = new KeymapManager({ pathWatcher })
 keymaps.defaultTarget = document.body
 
 // Pass all the window's keydown events to the KeymapManager
