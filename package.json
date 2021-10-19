@@ -4,14 +4,13 @@
   "description": "Inkdrop's DOM-aware keymap module",
   "main": "./lib/keymap-manager",
   "scripts": {
-    "prepare": "npm run clean && npm run compile && npm run lint && npm run atomdoc",
+    "prepare": "npm run clean && npm run compile && npm run lint",
     "clean": "rimraf lib && rimraf api.json",
     "compile": "coffee --no-header --output lib --compile src && babel src --out-dir lib",
     "lint": "coffeelint -r src spec && eslint src spec",
     "test": "electron-mocha --renderer --preload spec/helpers/setup.js spec/*",
     "test-drive": "SUPPRESS_EXIT=true electron-mocha --no-colors --renderer --interactive --preload spec/helpers/setup.js spec/*",
-    "ci": "npm run compile && npm run lint && npm run test",
-    "atomdoc": "grunt shell:update-atomdoc atomdoc"
+    "ci": "npm run compile && npm run lint && npm run test"
   },
   "repository": {
     "type": "git",
