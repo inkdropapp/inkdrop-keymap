@@ -1,5 +1,5 @@
 {calculateSpecificity} = require 'clear-cut'
-KeyboardLayout = require '@craftzdog/keyboard-layout'
+KeyboardLayout = require 'inkdrop-keyboard-layout'
 
 MODIFIERS = new Set(['ctrl', 'alt', 'shift', 'cmd'])
 ENDS_IN_MODIFIER_REGEX = /(ctrl|alt|shift|cmd)$/
