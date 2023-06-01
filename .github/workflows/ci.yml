@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: "18"
       - name: Install dependencies
-        run: npm i
+        run: npm i --openssl_fips=''
       - name: Rebuild dependencies for Electron
         run: npx electron-rebuild
       - name: Run tests
