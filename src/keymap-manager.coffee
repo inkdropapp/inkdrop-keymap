@@ -1,5 +1,5 @@
 CSON = require 'season'
-fs = require 'fs-plus'
+fs = require '@craftzdog/fs-plus'
 {isSelectorValid} = require 'clear-cut'
 path = require 'path'
 {Emitter, Disposable, CompositeDisposable} = require 'event-kit'

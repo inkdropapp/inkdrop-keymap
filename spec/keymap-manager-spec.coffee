@@ -1,6 +1,6 @@
 {$$} = require 'space-pencil'
 debounce = require 'debounce'
-fs = require 'fs-plus'
+fs = require '@craftzdog/fs-plus'
 path = require 'path'
 temp = require 'temp'
 KeyboardLayout = require('inkdrop-keyboard-layout')
