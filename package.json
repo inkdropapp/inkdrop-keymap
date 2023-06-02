@@ -39,7 +39,6 @@
     "debounce": "1.0.0",
     "electron": "^21",
     "electron-mocha": "^12.0.0",
-    "electron-rebuild": "^3.2.9",
     "eslint": "^8.41.0",
     "eslint-config-prettier": "^8.8.0",
     "grunt": "0.4.1",
