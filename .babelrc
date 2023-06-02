@@ -1,4 +1,14 @@
 {
-  "presets": ["es2015", "stage-0"],
-  "sourceMaps": "inline"
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": "commonjs",
+        "targets": { "electron": "21.3.3" },
+        "useBuiltIns": false,
+        "debug": false
+      }
+    ]
+  ],
+  "plugins": []
 }

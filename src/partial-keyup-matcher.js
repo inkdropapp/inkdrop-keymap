@@ -1,20 +1,16 @@
-'use babel'
-
-module.exports =
-class PartialKeyupMatcher {
-
-  constructor () {
+module.exports = class PartialKeyupMatcher {
+  constructor() {
     this._pendingMatches = new Set()
   }
 
-  addPendingMatch (keyBinding) {
+  addPendingMatch(keyBinding) {
     this._pendingMatches.add(keyBinding)
     keyBinding['nextKeyUpIndex'] = 0
   }
 
   // Returns matching bindingss, if any.
   // Updates state for next match.
-  getMatches (userKeyupKeystroke) {
+  getMatches(userKeyupKeystroke) {
     userKeyupKeystroke = this._normalizeKeystroke(userKeyupKeystroke)
     let matches = new Set()
 
@@ -32,12 +28,12 @@ class PartialKeyupMatcher {
 
   /** Private Section **/
 
-  _normalizeKeystroke (keystroke) {
+  _normalizeKeystroke(keystroke) {
     if (keystroke[0] === '^') return keystroke.substring(1)
     return keystroke
   }
 
-  _updateStateForMatch (matches, keyBinding) {
+  _updateStateForMatch(matches, keyBinding) {
     if (keyBinding['nextKeyUpIndex'] === keyBinding.getKeyups().length - 1) {
       // Full match. Remove and return it.
       this._pendingMatches.delete(keyBinding)
@@ -47,5 +43,4 @@ class PartialKeyupMatcher {
       keyBinding['nextKeyUpIndex']++
     }
   }
-
 }

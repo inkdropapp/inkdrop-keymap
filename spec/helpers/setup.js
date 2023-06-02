@@ -1,5 +1,4 @@
-require('babel-register')
-require('coffee-script/register')
+require('@babel/register')
 
 global.assert = require('chai').assert
 

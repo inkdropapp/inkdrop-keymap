@@ -3,7 +3,7 @@
 /* global assert */
 
 const PartialKeyupMatcher = require('../src/partial-keyup-matcher.js')
-import {KeyBinding} from '../src/key-binding'
+import { KeyBinding } from '../src/key-binding'
 
 describe('PartialKeyupMatcher', () => {
   it('returns a simple single-modifier-keyup match', () => {
@@ -33,10 +33,10 @@ describe('PartialKeyupMatcher', () => {
     const matcher = new PartialKeyupMatcher()
     const kb = keyBindingArgHelper('ctrl-shift-tab ^ctrl ^shift')
     matcher.addPendingMatch(kb)
-    matches = matcher.getMatches('^shift') // no-op should return no match
+    let matches = matcher.getMatches('^shift') // no-op should return no match
     assert.equal(matches.length, 0)
-     // should return no match but set state to match on next ^ctrl
-    let matches = matcher.getMatches('^ctrl')
+    // should return no match but set state to match on next ^ctrl
+    matches = matcher.getMatches('^ctrl')
     assert.equal(matches.length, 0)
     matches = matcher.getMatches('^shift')
     assert.equal(matches.length, 1)
@@ -48,6 +48,6 @@ describe('PartialKeyupMatcher', () => {
   })
 })
 
-function keyBindingArgHelper (binding) {
+function keyBindingArgHelper(binding) {
   return new KeyBinding('test', 'test', binding, 'body', 0)
 }

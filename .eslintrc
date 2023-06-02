@@ -1,12 +1,10 @@
 {
-  "extends": "standard",
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
+  "extends": ["prettier"],
   "env": {
     "browser": true,
     "node": true,
-    "es6": true,
+    "es6": true
   },
-  "plugins": [
-    "promise"
-  ],
+  "plugins": []
 }

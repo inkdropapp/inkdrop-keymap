@@ -9,7 +9,7 @@ let sinonSandbox, fakeClock, processPlatform, originalProcessPlatform
 
 originalProcessPlatform = process.platform
 processPlatform = process.platform
-Object.defineProperty(process, 'platform', {get: () => processPlatform})
+Object.defineProperty(process, 'platform', { get: () => processPlatform })
 
 beforeEach(function () {
   document.body.innerHTML = ''
@@ -23,33 +23,34 @@ afterEach(function () {
   processPlatform = originalProcessPlatform
 })
 
-export function appendContent (element) {
+export function appendContent(element) {
   document.body.appendChild(element)
   return element
 }
 
-export function stub () {
+export function stub() {
   return sinonSandbox.stub(...arguments)
 }
 
-export function getFakeClock () {
+export function getFakeClock() {
   return fakeClock
 }
 
-export function mockProcessPlatform (platform) {
+export function mockProcessPlatform(platform) {
   processPlatform = platform
 }
 
-export function buildKeydownEvent (props) {
+export function buildKeydownEvent(props) {
   return buildKeyboardEvent('keydown', props)
 }
 
-export function buildKeyupEvent (props) {
+export function buildKeyupEvent(props) {
   return buildKeyboardEvent('keyup', props)
 }
 
-export function buildKeyboardEvent (type, props) {
-  let {key, code, ctrlKey, shiftKey, altKey, metaKey, target, modifierState} = props
+export function buildKeyboardEvent(type, props) {
+  let { key, code, ctrlKey, shiftKey, altKey, metaKey, target, modifierState } =
+    props
   if (!modifierState) modifierState = {}
 
   if (process.platform === 'darwin') {
@@ -66,19 +67,26 @@ export function buildKeyboardEvent (type, props) {
   }
 
   const event = new KeyboardEvent(type, {
-    key, code,
-    ctrlKey, shiftKey, altKey, metaKey,
-    cancelable: true, bubbles: true
+    key,
+    code,
+    ctrlKey,
+    shiftKey,
+    altKey,
+    metaKey,
+    cancelable: true,
+    bubbles: true
   })
 
   if (target) {
-    Object.defineProperty(event, 'target', {get: () => target})
-    Object.defineProperty(event, 'path', {get: () => [target]})
+    Object.defineProperty(event, 'target', { get: () => target })
+    Object.defineProperty(event, 'path', { get: () => [target] })
   }
 
-  Object.defineProperty(event, 'getModifierState', {value: (key) => {
-    return !!modifierState[key]
-  }})
+  Object.defineProperty(event, 'getModifierState', {
+    value: key => {
+      return !!modifierState[key]
+    }
+  })
 
   return event
 }
