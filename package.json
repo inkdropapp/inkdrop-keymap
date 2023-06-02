@@ -4,7 +4,7 @@
   "description": "Inkdrop's DOM-aware keymap module",
   "main": "./src/keymap-manager",
   "scripts": {
-    "prepare": "npm run clean && npm run compile && npm run lint",
+    "prepare": "npm run clean && npm run lint",
     "clean": "rimraf lib && rimraf api.json",
     "lint": "eslint src spec",
     "test": "electron-mocha --renderer --preload spec/helpers/setup.js spec/*",
