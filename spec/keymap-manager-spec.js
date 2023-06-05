@@ -5,7 +5,6 @@ const path = require('path')
 const temp = require('temp')
 const KeyboardLayout = require('inkdrop-keyboard-layout')
 const chokidar = require('chokidar')
-console.log('chokidar:', chokidar.toString())
 
 const KeymapManager = require('../src/keymap-manager')
 const {
@@ -2174,12 +2173,13 @@ describe('KeymapManager', function () {
         beforeEach(function () {
           keymapFilePath = path.join(
             temp.mkdirSync('keymap-manager-spec'),
-            'keymapManager.cson'
+            'keymapManager.yml'
           )
           fs.writeFileSync(
             keymapFilePath,
             `\
-'.a': 'ctrl-a': 'x'\
+'.a':
+  'ctrl-a': 'x'
 `
           )
           keymapManager.loadKeymap(keymapFilePath, { watch: true })
@@ -2197,8 +2197,10 @@ describe('KeymapManager', function () {
             fs.writeFileSync(
               keymapFilePath,
               `\
-'.a': 'ctrl-a': 'y'
-'.b': 'ctrl-b': 'z'\
+'.a':
+  'ctrl-a': 'y'
+'.b':
+  'ctrl-b': 'z'
 `
             )
 
@@ -2254,7 +2256,7 @@ describe('KeymapManager', function () {
             done = debounce(done, 500)
 
             stub(console, 'warn')
-            fs.writeFileSync(keymapFilePath, 'junk1.')
+            fs.writeFileSync(keymapFilePath, 'foo: !->\n')
 
             return keymapManager.onDidFailToReadFile(function () {
               assert(console.warn.callCount > 0)
@@ -2307,8 +2309,10 @@ describe('KeymapManager', function () {
           fs.writeFileSync(
             keymapFilePath,
             `\
-'.a': 'ctrl-a': 'y'
-'.b': 'ctrl-b': 'z'\
+'.a':
+  'ctrl-a': 'y'
+'.b':
+  'ctrl-b': 'z'
 `
           )
 
@@ -2323,7 +2327,8 @@ describe('KeymapManager', function () {
             fs.writeFileSync(
               keymapFilePath,
               `\
-'.a': 'ctrl-a': 'q'\
+'.a':
+  'ctrl-a': 'q'
 `
             )
 

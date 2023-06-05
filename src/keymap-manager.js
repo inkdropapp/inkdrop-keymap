@@ -1,5 +1,5 @@
 let KeymapManager
-const CSON = require('season')
+const CSON = require('@inkdropapp/yeason')
 const fs = require('@craftzdog/fs-plus')
 const { isSelectorValid } = require('clear-cut')
 const path = require('path')
