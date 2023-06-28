@@ -11,4 +11,3 @@ Gruntfile.coffee
 npm-debug.log
 script
 spec
-src
