@@ -17,7 +17,6 @@ const {
   isKeyup
 } = require('./helpers')
 const PartialKeyupMatcher = require('./partial-keyup-matcher')
-const chokidar = require('chokidar')
 
 const Platforms = ['darwin', 'freebsd', 'linux', 'sunos', 'win32']
 const OtherPlatforms = Platforms.filter(
@@ -475,6 +474,7 @@ module.exports = KeymapManager = (function () {
         const reloadKeymap = (event, p) => {
           this.reloadKeymap(filePath, options)
         }
+        const chokidar = require('chokidar')
         const watcher = chokidar.watch(filePath, { useFsEvents: false })
         watcher.on('all', reloadKeymap)
 
