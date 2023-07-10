@@ -448,7 +448,8 @@ module.exports = KeymapManager = (function () {
           options != null ? options.priority : undefined
         )
         if (options != null ? options.watch : undefined) {
-          this.watchKeymap(bindingsPath, options)
+          const watch = () => this.watchKeymap(bindingsPath, options)
+          options.watchImmediately ? watch() : setTimeout(watch, 300)
         }
       }
 
