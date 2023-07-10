@@ -20,7 +20,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@craftzdog/fs-plus": "^4.0.1",
+    "@craftzdog/fs-plus": "^4.0.2",
     "@inkdropapp/yeason": "^7.0.0",
     "chokidar": "^3.5.3",
     "clear-cut": "^2",

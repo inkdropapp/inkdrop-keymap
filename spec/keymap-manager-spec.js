@@ -6,6 +6,8 @@ const temp = require('temp')
 const KeyboardLayout = require('inkdrop-keyboard-layout')
 const chokidar = require('chokidar')
 
+fs.loadRimRaf()
+
 const KeymapManager = require('../src/keymap-manager')
 const {
   appendContent,
