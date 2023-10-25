@@ -912,7 +912,7 @@ module.exports = KeymapManager = (function () {
       if ((character = characterForKeyboardEvent(keydownEvent))) {
         const textInputEvent = document.createEvent('TextEvent')
         textInputEvent.initTextEvent('textInput', true, true, window, character)
-        return keydownEvent.path[0].dispatchEvent(textInputEvent)
+        return keydownEvent.target.dispatchEvent(textInputEvent)
       }
     }
 
