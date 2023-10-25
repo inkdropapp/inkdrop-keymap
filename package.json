@@ -1,6 +1,6 @@
 {
   "name": "inkdrop-keymap",
-  "version": "8.4.4",
+  "version": "8.4.5",
   "description": "Inkdrop's DOM-aware keymap module",
   "main": "./src/keymap-manager",
   "scripts": {
