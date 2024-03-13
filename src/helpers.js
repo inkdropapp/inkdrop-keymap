@@ -142,9 +142,20 @@ var normalizeKeystroke = function (keystroke) {
   } else {
     if (isUpperCaseCharacter(primaryKey)) {
       modifiers.add('shift')
-    }
-    if (modifiers.has('shift') && isLowerCaseCharacter(primaryKey)) {
-      primaryKey = primaryKey.toUpperCase()
+    } else if (modifiers.has('shift')) {
+      if (isLowerCaseCharacter(primaryKey)) {
+        primaryKey = primaryKey.toUpperCase()
+      } else if (isLatinCharacter(primaryKey)) {
+        const characters = KeyboardLayout.getCurrentKeymap()
+        const code = Object.keys(characters).find(
+          code => characters[code].unmodified === primaryKey
+        )
+        const keyWithShift = characters[code]?.withShift
+        if (keyWithShift) {
+          primaryKey = keyWithShift
+          modifiers.delete('shift')
+        }
+      }
     }
   }
 

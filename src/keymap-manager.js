@@ -967,19 +967,19 @@ module.exports = KeymapManager = (function () {
         target != null &&
         target !== document
       ) {
-        partialMatchCandidates = partialMatchCandidates.filter(function (
-          binding
-        ) {
-          if (
-            !ignoreKeystrokes.has(binding.keystrokes) &&
-            target.webkitMatchesSelector(binding.selector)
-          ) {
-            partialMatches.push(binding)
-            return false
-          } else {
-            return true
+        partialMatchCandidates = partialMatchCandidates.filter(
+          function (binding) {
+            if (
+              !ignoreKeystrokes.has(binding.keystrokes) &&
+              target.webkitMatchesSelector(binding.selector)
+            ) {
+              partialMatches.push(binding)
+              return false
+            } else {
+              return true
+            }
           }
-        })
+        )
         target = target.parentElement
       }
       return partialMatches.sort((a, b) => b.keystrokeCount - a.keystrokeCount)
