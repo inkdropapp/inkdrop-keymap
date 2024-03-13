@@ -2184,7 +2184,10 @@ describe('KeymapManager', function () {
   'ctrl-a': 'x'
 `
           )
-          keymapManager.loadKeymap(keymapFilePath, { watch: true, watchImmediately: true })
+          keymapManager.loadKeymap(keymapFilePath, {
+            watch: true,
+            watchImmediately: true
+          })
           subscription = keymapManager.watchSubscriptions[keymapFilePath]
           return assert.equal(
             keymapManager.findKeyBindings({ command: 'x' }).length,
@@ -2325,7 +2328,10 @@ describe('KeymapManager', function () {
             assert(!reloaded)
 
             // Can start watching again after cancelling
-            keymapManager.loadKeymap(keymapFilePath, { watch: true, watchImmediately: true })
+            keymapManager.loadKeymap(keymapFilePath, {
+              watch: true,
+              watchImmediately: true
+            })
             fs.writeFileSync(
               keymapFilePath,
               `\
