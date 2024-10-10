@@ -2199,15 +2199,17 @@ describe('KeymapManager', function () {
           it("reloads the file's key bindings and notifies ::onDidReloadKeymap observers with the keymap path", function (done) {
             done = debounce(done, 500)
 
-            fs.writeFileSync(
-              keymapFilePath,
-              `\
+            setTimeout(() => {
+              fs.writeFileSync(
+                keymapFilePath,
+                `\
 '.a':
   'ctrl-a': 'y'
 '.b':
   'ctrl-b': 'z'
 `
-            )
+              )
+            }, 100)
 
             return keymapManager.onDidReloadKeymap(function (event) {
               assert.equal(event.path, keymapFilePath)
@@ -2230,7 +2232,9 @@ describe('KeymapManager', function () {
           it("reloads the file's key bindings and notifies ::onDidReloadKeymap observers with the keymap path even if the file is empty", function (done) {
             done = debounce(done, 500)
 
-            fs.writeFileSync(keymapFilePath, '')
+            setTimeout(() => {
+              fs.writeFileSync(keymapFilePath, '')
+            }, 100)
 
             return keymapManager.onDidReloadKeymap(function (event) {
               assert.equal(event.path, keymapFilePath)
@@ -2242,13 +2246,15 @@ describe('KeymapManager', function () {
           it("reloads the file's key bindings and notifies ::onDidReloadKeymap observers with the keymap path even if the file has only comments", function (done) {
             done = debounce(done, 500)
 
-            fs.writeFileSync(
-              keymapFilePath,
-              `\
+            setTimeout(() => {
+              fs.writeFileSync(
+                keymapFilePath,
+                `\
 #  '.a': 'ctrl-a': 'y'
 #  '.b': 'ctrl-b': 'z'\
 `
-            )
+              )
+            }, 100)
 
             return keymapManager.onDidReloadKeymap(function (event) {
               assert.equal(event.path, keymapFilePath)
@@ -2261,7 +2267,9 @@ describe('KeymapManager', function () {
             done = debounce(done, 500)
 
             stub(console, 'warn')
-            fs.writeFileSync(keymapFilePath, 'foo: !->\n')
+            setTimeout(() => {
+              fs.writeFileSync(keymapFilePath, 'foo: !->\n')
+            }, 100)
 
             return keymapManager.onDidFailToReadFile(function () {
               assert(console.warn.callCount > 0)
@@ -2277,7 +2285,7 @@ describe('KeymapManager', function () {
         describe('when the file is removed', () =>
           it('removes the bindings and notifies ::onDidUnloadKeymap observers with keymap path', function (done) {
             console.log('REMOVING', keymapFilePath)
-            fs.removeSync(keymapFilePath)
+            setTimeout(() => fs.removeSync(keymapFilePath), 100)
 
             return keymapManager.onDidUnloadKeymap(function (event) {
               assert.equal(event.path, keymapFilePath)
@@ -2295,7 +2303,7 @@ describe('KeymapManager', function () {
               temp.mkdirSync('keymap-manager-spec'),
               'other-guy.cson'
             )
-            fs.moveSync(keymapFilePath, newFilePath)
+            setTimeout(() => fs.moveSync(keymapFilePath, newFilePath), 100)
 
             return keymapManager.onDidUnloadKeymap(function (event) {
               assert.equal(event.path, keymapFilePath)
@@ -2311,15 +2319,17 @@ describe('KeymapManager', function () {
           done = debounce(done, 100)
 
           subscription.dispose()
-          fs.writeFileSync(
-            keymapFilePath,
-            `\
+          setTimeout(() => {
+            fs.writeFileSync(
+              keymapFilePath,
+              `\
 '.a':
   'ctrl-a': 'y'
 '.b':
   'ctrl-b': 'z'
 `
-          )
+            )
+          }, 100)
 
           let reloaded = false
           keymapManager.onDidReloadKeymap(() => (reloaded = true))
@@ -2332,13 +2342,15 @@ describe('KeymapManager', function () {
               watch: true,
               watchImmediately: true
             })
-            fs.writeFileSync(
-              keymapFilePath,
-              `\
+            setTimeout(() => {
+              fs.writeFileSync(
+                keymapFilePath,
+                `\
 '.a':
   'ctrl-a': 'q'
 `
-            )
+              )
+            }, 100)
 
             return keymapManager.onDidReloadKeymap(function () {
               assert.equal(

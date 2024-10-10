@@ -22,7 +22,7 @@
   "dependencies": {
     "@craftzdog/fs-plus": "^4.0.2",
     "@inkdropapp/yeason": "^7.0.0",
-    "chokidar": "^3.5.3",
+    "chokidar": "^4.0.1",
     "clear-cut": "^2",
     "event-kit": "^2.5.3",
     "inkdrop-keyboard-layout": "^2.0.18",

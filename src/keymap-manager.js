@@ -476,7 +476,7 @@ module.exports = KeymapManager = (function () {
           this.reloadKeymap(filePath, options)
         }
         const chokidar = require('chokidar')
-        const watcher = chokidar.watch(filePath, { useFsEvents: false })
+        const watcher = chokidar.watch(filePath)
         watcher.on('all', reloadKeymap)
 
         this.watchSubscriptions[filePath] = new Disposable(() => {
