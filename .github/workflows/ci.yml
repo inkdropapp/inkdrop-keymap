@@ -17,8 +17,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - if: ${{ ! startsWith(matrix.os, 'windows') }}
-        run: python3 -m pip install setuptools
+      # - if: ${{ ! startsWith(matrix.os, 'windows') }}
+      #   run: python3 -m pip install setuptools
       - name: Install dependencies
         run: npm i --openssl_fips=''
       - name: Rebuild dependencies for Electron
