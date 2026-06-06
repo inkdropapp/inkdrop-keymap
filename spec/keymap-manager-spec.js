@@ -1,9 +1,10 @@
 import { $$ } from 'space-pencil'
 import debounce from 'debounce'
 import fs from '@craftzdog/fs-plus'
+import os from 'node:os'
 import path from 'node:path'
+import { mkdtempSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import temp from 'temp'
 import KeyboardLayout from 'inkdrop-keyboard-layout'
 import KeymapManager from '../src/keymap-manager.js'
 import {
@@ -2180,7 +2181,7 @@ describe('KeymapManager', function () {
 
         beforeEach(function () {
           keymapFilePath = path.join(
-            temp.mkdirSync('keymap-manager-spec'),
+            mkdtempSync(path.join(os.tmpdir(), 'keymap-manager-spec-')),
             'keymapManager.yml'
           )
           fs.writeFileSync(
@@ -2306,7 +2307,7 @@ describe('KeymapManager', function () {
         describe('when the file is moved', () =>
           it('removes the bindings', function (done) {
             const newFilePath = path.join(
-              temp.mkdirSync('keymap-manager-spec'),
+              mkdtempSync(path.join(os.tmpdir(), 'keymap-manager-spec-')),
               'other-guy.cson'
             )
             setTimeout(() => fs.moveSync(keymapFilePath, newFilePath), 100)

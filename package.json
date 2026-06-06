@@ -44,7 +44,6 @@
     "oxfmt": "^0.53.0",
     "oxlint": "^1.68.0",
     "sinon": "22.0.0",
-    "space-pencil": "0.3.0",
-    "temp": "0.9.4"
+    "space-pencil": "0.3.0"
   }
 }
