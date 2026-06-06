@@ -32,11 +32,13 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libx11-dev libxkbfile-dev xvfb
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      # Electron 42 has no postinstall; the binary is fetched lazily on first
-      # require(), which races under electron-mocha (two processes download at
-      # once). Pre-download it once so the renderer tests don't race.
+      # Electron 42 has no postinstall; its binary is fetched lazily on first
+      # require(). electron/install.js fires that download off without awaiting,
+      # so in CI the process exits before it finishes and `path.txt` is never
+      # written — then electron-mocha's parent+renderer both retry and race.
+      # This downloader awaits the fetch, so it can't exit early.
       - name: Download Electron binary
-        run: node node_modules/electron/install.js
+        run: node script/download-electron.mjs
       - name: Lint
         run: pnpm run lint
       # Linux needs a virtual X display for the Electron renderer; other platforms
