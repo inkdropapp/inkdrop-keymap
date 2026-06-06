@@ -1,13 +1,15 @@
 {
   "name": "inkdrop-keymap",
-  "version": "8.4.7",
+  "version": "9.0.0",
   "description": "Inkdrop's DOM-aware keymap module",
   "type": "module",
   "main": "./src/keymap-manager.js",
   "exports": {
     ".": "./src/keymap-manager.js"
   },
-  "files": ["src"],
+  "files": [
+    "src"
+  ],
   "scripts": {
     "prepublishOnly": "npm run lint",
     "lint": "oxlint src spec",
