@@ -1,19 +1,19 @@
 # Inkdrop keymap
 
-[![Build Status](https://travis-ci.org/atom/atom-keymap.svg?branch=master)](https://travis-ci.org/atom/atom-keymap)
-[![Dependency Status](https://david-dm.org/atom/atom-keymap.svg)](https://david-dm.org/atom/atom-keymap)
+[![CI](https://github.com/inkdropapp/inkdrop-keymap/actions/workflows/ci.yml/badge.svg)](https://github.com/inkdropapp/inkdrop-keymap/actions/workflows/ci.yml)
 
-Inkdrop's DOM-aware keymap module
+Inkdrop's DOM-aware keymap module.
+
+This is a pure-ESM module (`"type": "module"`).
 
 ```js
-var KeymapManager, keymaps
-KeymapManager = require('inkdrop-keymap')
+import KeymapManager from 'inkdrop-keymap'
 
-keymaps = new KeymapManager({})
+const keymaps = new KeymapManager({})
 keymaps.defaultTarget = document.body
 
 // Pass all the window's keydown events to the KeymapManager
-document.addEventListener('keydown', function (event) {
+document.addEventListener('keydown', event => {
   keymaps.handleKeyboardEvent(event)
 })
 
@@ -34,9 +34,14 @@ window.addEventListener('core:move-down', event => console.log('down', event))
 
 ## Development
 
-The tests for this module _must_ be run in Electron because they depend on browser APIs.
+Requires [pnpm](https://pnpm.io) and Node.js 24+. The tests _must_ run in Electron (via [`electron-mocha`](https://github.com/jprichardson/electron-mocha)) because they depend on browser APIs such as the DOM and `KeyboardEvent`.
 
-- [`devtool`](https://github.com/Jam3/devtool) is bundled as a development dependency to run the tests.
-- Native modules need to be compiled against the version of Electron included with `devtool`. **Be sure to run `electron-rebuild` be sure recompile native dependencies before running tests.**
-- Tests can be run in batch mode with `npm test`
-- If you want to use the debugger, profiler, etc or just speed up your flow by being able to refresh the `devtool` window to re-run tests, use the `npm run test-drive` script. This will keep `devtool` open instead of exiting after the test run.
+```sh
+pnpm install      # install dependencies
+pnpm test         # run the test suite (batch mode)
+pnpm run test-drive  # keep the Electron window open to re-run / debug tests
+pnpm run lint     # lint with oxlint
+pnpm run format   # format with oxfmt
+```
+
+The native keyboard-layout dependency ([`inkdrop-keyboard-layout`](https://github.com/inkdropapp/keyboard-layout)) ships prebuilt N-API binaries, so no native compilation or `electron-rebuild` step is required. Electron downloads its runtime binary automatically on first use.
