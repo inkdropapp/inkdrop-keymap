@@ -34,7 +34,7 @@ window.addEventListener('core:move-down', event => console.log('down', event))
 
 ## Development
 
-Requires [pnpm](https://pnpm.io) and Node.js 24+. The tests _must_ run in Electron (via [`electron-mocha`](https://github.com/jprichardson/electron-mocha)) because they depend on browser APIs such as the DOM and `KeyboardEvent`.
+Requires [pnpm](https://pnpm.io) and Node.js 26+ (Node 24 mis-handles Electron's lazy binary download). The tests _must_ run in Electron (via [`electron-mocha`](https://github.com/jprichardson/electron-mocha)) because they depend on browser APIs such as the DOM and `KeyboardEvent`.
 
 ```sh
 pnpm install      # install dependencies
