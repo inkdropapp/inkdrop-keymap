@@ -39,6 +39,16 @@ jobs:
       # it reliably (see the script for details).
       - name: Download Electron binary
         run: node script/download-electron.mjs
+      # Chromium's SUID sandbox requires chrome-sandbox to be owned by root with
+      # mode 4755. Extracting Electron as the runner user doesn't set that, so
+      # Electron aborts on Linux. (Ubuntu 24.04 restricts unprivileged user
+      # namespaces, so Chromium falls back to this SUID sandbox.)
+      - name: Configure Electron SUID sandbox (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sandbox="$(node -p "require('node:path').join(require('node:path').dirname(require.resolve('electron/package.json')), 'dist', 'chrome-sandbox')")"
+          sudo chown root:root "$sandbox"
+          sudo chmod 4755 "$sandbox"
       - name: Lint
         run: pnpm run lint
       # Linux needs a virtual X display for the Electron renderer; other platforms
