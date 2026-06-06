@@ -18,23 +18,32 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11
       - uses: actions/setup-node@v6
         with:
           node-version: "24"
+          cache: pnpm
       # The inkdrop-keyboard-layout native addon links against X11 + xkbfile, and
       # the Electron renderer tests need a virtual display on Linux.
       - name: Install X11 libraries (Linux only)
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y libx11-dev libxkbfile-dev xvfb
       - name: Install dependencies
-        run: npm i
+        run: pnpm install --frozen-lockfile
+      # Electron 42 has no postinstall; the binary is fetched lazily on first
+      # require(), which races under electron-mocha (two processes download at
+      # once). Pre-download it once so the renderer tests don't race.
+      - name: Download Electron binary
+        run: node node_modules/electron/install.js
       - name: Lint
-        run: npm run lint
+        run: pnpm run lint
       # Linux needs a virtual X display for the Electron renderer; other platforms
       # run the tests directly.
       - name: Run tests (Linux)
         if: runner.os == 'Linux'
-        run: xvfb-run --auto-servernum npm test
+        run: xvfb-run --auto-servernum pnpm test
       - name: Run tests
         if: runner.os != 'Linux'
-        run: npm test
+        run: pnpm test
