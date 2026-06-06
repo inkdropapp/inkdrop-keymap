@@ -23,9 +23,6 @@ jobs:
           version: 11
       - uses: actions/setup-node@v6
         with:
-          # Node 24 has an event-loop regression that makes Electron's lazy
-          # binary download (extract step) bail with an unsettled top-level
-          # await; Node 26 downloads it correctly.
           node-version: "26"
           cache: pnpm
       # The inkdrop-keyboard-layout native addon links against X11 + xkbfile, and
@@ -37,10 +34,11 @@ jobs:
         run: pnpm install --frozen-lockfile
       # Electron 42 removed the postinstall that used to fetch the binary at
       # install time (supply-chain hardening); it now downloads lazily on first
-      # require(). Pre-download it once here so electron-mocha's parent + renderer
-      # don't both trigger the download at test time and race on it.
+      # require(), which electron-mocha's parent + renderer then race on. Electron's
+      # own install.js doesn't complete the download in CI, so this pre-downloads
+      # it reliably (see the script for details).
       - name: Download Electron binary
-        run: node node_modules/electron/install.js
+        run: node script/download-electron.mjs
       - name: Lint
         run: pnpm run lint
       # Linux needs a virtual X display for the Electron renderer; other platforms
