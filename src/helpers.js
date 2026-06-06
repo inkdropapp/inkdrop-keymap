@@ -1,6 +1,11 @@
-let isKeyup
-const { calculateSpecificity } = require('clear-cut')
-const KeyboardLayout = require('inkdrop-keyboard-layout')
+import { calculateSpecificity } from 'clear-cut'
+import KeyboardLayout from 'inkdrop-keyboard-layout'
+import usKeymap from './us-keymap.js'
+import slovakCmdKeymap from './slovak-cmd-keymap.js'
+import slovakQwertyCmdKeymap from './slovak-qwerty-cmd-keymap.js'
+
+export const isKeyup = keystroke =>
+  keystroke.startsWith('^') && keystroke !== '^'
 
 const MODIFIERS = new Set(['ctrl', 'alt', 'shift', 'cmd'])
 const ENDS_IN_MODIFIER_REGEX = /(ctrl|alt|shift|cmd)$/
@@ -70,24 +75,11 @@ const isLowerCaseCharacter = character =>
   character.length === 1 &&
   character.toUpperCase() !== character
 
-let usKeymap = null
 const usCharactersForKeyCode = function (code) {
-  if (usKeymap == null) {
-    usKeymap = require('./us-keymap')
-  }
   return usKeymap[code]
 }
 
-let slovakCmdKeymap = null
-let slovakQwertyCmdKeymap = null
 const slovakCmdCharactersForKeyCode = function (code, layout) {
-  if (slovakCmdKeymap == null) {
-    slovakCmdKeymap = require('./slovak-cmd-keymap')
-  }
-  if (slovakQwertyCmdKeymap == null) {
-    slovakQwertyCmdKeymap = require('./slovak-qwerty-cmd-keymap')
-  }
-
   if (layout === 'com.apple.keylayout.Slovak') {
     return slovakCmdKeymap[code]
   } else {
@@ -95,7 +87,7 @@ const slovakCmdCharactersForKeyCode = function (code, layout) {
   }
 }
 
-exports.normalizeKeystrokes = function (keystrokes) {
+export const normalizeKeystrokes = function (keystrokes) {
   const normalizedKeystrokes = []
   for (var keystroke of Array.from(keystrokes.split(WHITESPACE_REGEX))) {
     var normalizedKeystroke
@@ -207,7 +199,10 @@ var parseKeystroke = function (keystroke) {
   return keys
 }
 
-exports.keystrokeForKeyboardEvent = function (event, customKeystrokeResolvers) {
+export const keystrokeForKeyboardEvent = function (
+  event,
+  customKeystrokeResolvers
+) {
   let characters
   let { key, code, ctrlKey, altKey, shiftKey, metaKey } = event
 
@@ -457,30 +452,29 @@ var nonAltModifiedKeyForKeyboardEvent = function (event) {
   }
 }
 
-exports.MODIFIERS = MODIFIERS
+export { MODIFIERS }
 
-exports.characterForKeyboardEvent = function (event) {
+export const characterForKeyboardEvent = function (event) {
   if (event.key.length === 1 && !(event.ctrlKey || event.metaKey)) {
     return event.key
   }
 }
 
-exports.calculateSpecificity = calculateSpecificity
+export { calculateSpecificity }
 
-exports.isBareModifier = keystroke => ENDS_IN_MODIFIER_REGEX.test(keystroke)
+export const isBareModifier = keystroke =>
+  ENDS_IN_MODIFIER_REGEX.test(keystroke)
 
-exports.isModifierKeyup = keystroke =>
+export const isModifierKeyup = keystroke =>
   isKeyup(keystroke) && ENDS_IN_MODIFIER_REGEX.test(keystroke)
 
-exports.isKeyup = isKeyup = keystroke =>
-  keystroke.startsWith('^') && keystroke !== '^'
-
-exports.keydownEvent = (key, options) =>
+export const keydownEvent = (key, options) =>
   buildKeyboardEvent(key, 'keydown', options)
 
-exports.keyupEvent = (key, options) => buildKeyboardEvent(key, 'keyup', options)
+export const keyupEvent = (key, options) =>
+  buildKeyboardEvent(key, 'keyup', options)
 
-exports.getModifierKeys = function (keystroke) {
+export const getModifierKeys = function (keystroke) {
   const keys = keystroke.split('-')
   const mod_keys = []
   for (var key of Array.from(keys)) {
@@ -495,7 +489,7 @@ var buildKeyboardEvent = function (key, eventType, param) {
   if (param == null) {
     param = {}
   }
-  const { ctrl, shift, alt, cmd, keyCode, target, location } = param
+  const { ctrl, shift, alt, cmd, target } = param
   const ctrlKey = ctrl != null ? ctrl : false
   const altKey = alt != null ? alt : false
   const shiftKey = shift != null ? shift : false

@@ -1,0 +1,12 @@
+allowBuilds:
+  electron: true
+  es5-ext: true
+  inkdrop-keyboard-layout: false
+  lzma-native: true
+minimumReleaseAgeExclude:
+  - inkdrop-keyboard-layout
+onlyBuiltDependencies:
+  - electron
+  - es5-ext
+  - inkdrop-keyboard-layout
+  - lzma-native

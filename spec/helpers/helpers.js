@@ -2,7 +2,7 @@
 
 'use strict'
 
-import lolex from 'lolex'
+import FakeTimers from '@sinonjs/fake-timers'
 import sinon from 'sinon'
 
 let sinonSandbox, fakeClock, processPlatform, originalProcessPlatform
@@ -13,8 +13,8 @@ Object.defineProperty(process, 'platform', { get: () => processPlatform })
 
 beforeEach(function () {
   document.body.innerHTML = ''
-  sinonSandbox = sinon.sandbox.create()
-  fakeClock = lolex.install()
+  sinonSandbox = sinon.createSandbox()
+  fakeClock = FakeTimers.install()
 })
 
 afterEach(function () {
@@ -28,8 +28,13 @@ export function appendContent(element) {
   return element
 }
 
-export function stub() {
-  return sinonSandbox.stub(...arguments)
+export function stub(...args) {
+  // sinon 22 removed the `stub(obj, 'method', fn)` form; use callsFake instead.
+  if (args.length === 3) {
+    const [object, method, fn] = args
+    return sinonSandbox.stub(object, method).callsFake(fn)
+  }
+  return sinonSandbox.stub(...args)
 }
 
 export function getFakeClock() {

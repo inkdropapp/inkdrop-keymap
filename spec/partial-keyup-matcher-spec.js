@@ -1,9 +1,8 @@
-/** @babel */
 /* eslint-env mocha */
 /* global assert */
 
-const PartialKeyupMatcher = require('../src/partial-keyup-matcher.js')
-import { KeyBinding } from '../src/key-binding'
+import PartialKeyupMatcher from '../src/partial-keyup-matcher.js'
+import { KeyBinding } from '../src/key-binding.js'
 
 describe('PartialKeyupMatcher', () => {
   it('returns a simple single-modifier-keyup match', () => {

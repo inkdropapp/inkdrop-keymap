@@ -1,22 +1,34 @@
-const { $$ } = require('space-pencil')
-const debounce = require('debounce')
-const fs = require('@craftzdog/fs-plus')
-const path = require('path')
-const temp = require('temp')
-const KeyboardLayout = require('inkdrop-keyboard-layout')
-const chokidar = require('chokidar')
-
-fs.loadRimRaf()
-
-const KeymapManager = require('../src/keymap-manager')
-const {
+import { $$ } from 'space-pencil'
+import debounce from 'debounce'
+import fs from '@craftzdog/fs-plus'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import temp from 'temp'
+import KeyboardLayout from 'inkdrop-keyboard-layout'
+import KeymapManager from '../src/keymap-manager.js'
+import {
   appendContent,
   stub,
   getFakeClock,
   mockProcessPlatform,
   buildKeydownEvent,
   buildKeyupEvent
-} = require('./helpers/helpers')
+} from './helpers/helpers.js'
+import macDvorakQwertyCmdKeymap from './helpers/keymaps/mac-dvorak-qwerty-cmd.json' with { type: 'json' }
+import macSwissGermanKeymap from './helpers/keymaps/mac-swiss-german.json' with { type: 'json' }
+import windowsSwissGermanKeymap from './helpers/keymaps/windows-swiss-german.json' with { type: 'json' }
+import windowsUsInternationalKeymap from './helpers/keymaps/windows-us-international.json' with { type: 'json' }
+import linuxSwissGermanKeymap from './helpers/keymaps/linux-swiss-german.json' with { type: 'json' }
+import macGreekKeymap from './helpers/keymaps/mac-greek.json' with { type: 'json' }
+import macRussianPcKeymap from './helpers/keymaps/mac-russian-pc.json' with { type: 'json' }
+import macHebrewKeymap from './helpers/keymaps/mac-hebrew.json' with { type: 'json' }
+import macTurkishKeymap from './helpers/keymaps/mac-turkish.json' with { type: 'json' }
+import macSwedishKeymap from './helpers/keymaps/mac-swedish.json' with { type: 'json' }
+import windowsSwedishKeymap from './helpers/keymaps/windows-swedish.json' with { type: 'json' }
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+fs.loadRimRaf()
 
 describe('KeymapManager', function () {
   let keymapManager = null
@@ -661,20 +673,20 @@ describe('KeymapManager', function () {
         )
 
         events = []
-        elementA.addEventListener('y-command', e => events.push('y-keydown'))
-        elementA.addEventListener('y-command-ctrl-up', e =>
+        elementA.addEventListener('y-command', () => events.push('y-keydown'))
+        elementA.addEventListener('y-command-ctrl-up', () =>
           events.push('y-ctrl-keyup')
         )
-        elementA.addEventListener('x-command-ctrl-up', e =>
+        elementA.addEventListener('x-command-ctrl-up', () =>
           events.push('x-ctrl-keyup')
         )
-        elementA.addEventListener('y-command-y-up-ctrl-up', e =>
+        elementA.addEventListener('y-command-y-up-ctrl-up', () =>
           events.push('y-up-ctrl-keyup')
         )
-        elementA.addEventListener('abc-secret-code-command', e =>
+        elementA.addEventListener('abc-secret-code-command', () =>
           events.push('abc-secret-code')
         )
-        elementA.addEventListener('z-command-d-e-f', e =>
+        elementA.addEventListener('z-command-d-e-f', () =>
           events.push('z-keydown-d-e-f')
         )
 
@@ -1089,7 +1101,7 @@ describe('KeymapManager', function () {
     })
 
     return it('returns a disposable allowing the added bindings to be removed', function () {
-      const disposable1 = keymapManager.add('foo', {
+      keymapManager.add('foo', {
         '.a': {
           'ctrl-a': 'x'
         },
@@ -1551,9 +1563,7 @@ describe('KeymapManager', function () {
     describe('when the Dvorak QWERTY-⌘ layout is in use on macOS', () =>
       it('uses the US layout equivalent when the command key is held down', function () {
         mockProcessPlatform('darwin')
-        stub(KeyboardLayout, 'getCurrentKeymap', () =>
-          require('./helpers/keymaps/mac-dvorak-qwerty-cmd')
-        )
+        stub(KeyboardLayout, 'getCurrentKeymap', () => macDvorakQwertyCmdKeymap)
         stub(
           KeyboardLayout,
           'getCurrentKeyboardLayout',
@@ -1598,9 +1608,7 @@ describe('KeymapManager', function () {
     describe('when a custom Dvorak QWERTY-⌘ layout is in use on macOS', () =>
       it('uses the US layout equivalent when the command key is held down', function () {
         mockProcessPlatform('darwin')
-        stub(KeyboardLayout, 'getCurrentKeymap', () =>
-          require('./helpers/keymaps/mac-dvorak-qwerty-cmd')
-        )
+        stub(KeyboardLayout, 'getCurrentKeymap', () => macDvorakQwertyCmdKeymap)
         stub(
           KeyboardLayout,
           'getCurrentKeyboardLayout',
@@ -1694,7 +1702,7 @@ describe('KeymapManager', function () {
       it('allows ASCII characters (<= 127) to be typed via an option modifier on macOS', function () {
         mockProcessPlatform('darwin')
 
-        currentKeymap = require('./helpers/keymaps/mac-swiss-german')
+        currentKeymap = macSwissGermanKeymap
         assert.equal(
           keymapManager.keystrokeForKeyboardEvent(
             buildKeydownEvent({ key: '@', code: 'KeyG', altKey: true })
@@ -1730,7 +1738,7 @@ describe('KeymapManager', function () {
       it('allows ASCII characters (<= 127) to be typed via the ctrl-alt- modifiers on Windows', function () {
         mockProcessPlatform('win32')
 
-        currentKeymap = require('./helpers/keymaps/windows-swiss-german')
+        currentKeymap = windowsSwissGermanKeymap
         assert.equal(
           keymapManager.keystrokeForKeyboardEvent(
             buildKeydownEvent({
@@ -1754,7 +1762,7 @@ describe('KeymapManager', function () {
           'ctrl-alt-4'
         )
 
-        currentKeymap = require('./helpers/keymaps/windows-us-international')
+        currentKeymap = windowsUsInternationalKeymap
         return assert.equal(
           keymapManager.keystrokeForKeyboardEvent(
             buildKeydownEvent({
@@ -1820,7 +1828,7 @@ describe('KeymapManager', function () {
 
       it('falls back to the non-alt key if other modifiers are combined with ALtGraph on Linux', function () {
         mockProcessPlatform('linux')
-        currentKeymap = require('./helpers/keymaps/linux-swiss-german')
+        currentKeymap = linuxSwissGermanKeymap
         assert.equal(
           keymapManager.keystrokeForKeyboardEvent(
             buildKeydownEvent({
@@ -1871,7 +1879,7 @@ describe('KeymapManager', function () {
       })
 
       it('on non-Latin keyboards, converts keystrokes with modifiers to U.S. layout equivalent characters', function () {
-        currentKeymap = require('./helpers/keymaps/mac-greek')
+        currentKeymap = macGreekKeymap
         assert.equal(
           keymapManager.keystrokeForKeyboardEvent(
             buildKeydownEvent({ key: 'δ', code: 'KeyD' })
@@ -1909,14 +1917,14 @@ describe('KeymapManager', function () {
         )
 
         // If *any* key on the keyboard is non-Latin, even characters that *are* Latin remap to the U.S. equivalent character for the physical key
-        currentKeymap = require('./helpers/keymaps/mac-russian-pc')
+        currentKeymap = macRussianPcKeymap
         assert.equal(
           keymapManager.keystrokeForKeyboardEvent(
             buildKeydownEvent({ key: '.', code: 'Slash', ctrlKey: true })
           ),
           'ctrl-/'
         )
-        currentKeymap = require('./helpers/keymaps/mac-hebrew')
+        currentKeymap = macHebrewKeymap
         assert.equal(
           keymapManager.keystrokeForKeyboardEvent(
             buildKeydownEvent({ key: ']', code: 'BracketLeft', ctrlKey: true })
@@ -1931,7 +1939,7 @@ describe('KeymapManager', function () {
         )
 
         // Don't use U.S. counterpart for keyboards with all Latin characters
-        currentKeymap = require('./helpers/keymaps/mac-turkish')
+        currentKeymap = macTurkishKeymap
         assert.equal(
           keymapManager.keystrokeForKeyboardEvent(
             buildKeydownEvent({ key: 'ö', code: 'KeyX', metaKey: true })
@@ -1951,7 +1959,7 @@ describe('KeymapManager', function () {
 
       return it('translates dead keys to their printable equivalents on macOS, but not Windows', function () {
         mockProcessPlatform('darwin')
-        currentKeymap = require('./helpers/keymaps/mac-swedish')
+        currentKeymap = macSwedishKeymap
         assert.equal(
           keymapManager.keystrokeForKeyboardEvent(
             buildKeydownEvent({ key: 'Dead', code: 'BracketRight' })
@@ -1982,7 +1990,7 @@ describe('KeymapManager', function () {
         // We can't determine the character for a dead key on Windows without breaking dead key handling
         // in some cases because they have a terrible API, so we don't try.
         mockProcessPlatform('win32')
-        currentKeymap = require('./helpers/keymaps/windows-swedish')
+        currentKeymap = windowsSwedishKeymap
         assert.equal(
           keymapManager.keystrokeForKeyboardEvent(
             buildKeydownEvent({ key: 'Dead', code: 'BracketRight' })
@@ -2017,7 +2025,7 @@ describe('KeymapManager', function () {
     return describe('when custom keystroke resolvers are installed', () =>
       it('resolves to the keystroke string of the most recently-installed resolver returning a defined value', function () {
         mockProcessPlatform('darwin')
-        const currentKeymap = require('./helpers/keymaps/mac-swiss-german')
+        const currentKeymap = macSwissGermanKeymap
         const currentLayoutName = 'com.apple.keylayout.SwissGerman'
         stub(KeyboardLayout, 'getCurrentKeymap', () => currentKeymap)
         stub(
@@ -2032,7 +2040,7 @@ describe('KeymapManager', function () {
           ctrlKey: true,
           altKey: true
         })
-        const disposable1 = keymapManager.addKeystrokeResolver(function ({
+        keymapManager.addKeystrokeResolver(function ({
           keystroke,
           event,
           layoutName,
@@ -2060,9 +2068,7 @@ describe('KeymapManager', function () {
           return 'alt-ctrl-X'
         })
         let expectedKeystroke = 'ctrl-alt-shift-X'
-        const disposable3 = keymapManager.addKeystrokeResolver(function ({
-          keystroke
-        }) {
+        keymapManager.addKeystrokeResolver(function ({ keystroke }) {
           assert.equal(keystroke, expectedKeystroke)
           return null
         })

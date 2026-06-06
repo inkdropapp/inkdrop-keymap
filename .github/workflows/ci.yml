@@ -6,28 +6,34 @@ env:
   CI: true
 
 jobs:
-  Test:
+  test:
+    name: Test (${{ matrix.os }})
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os:
+          - ubuntu-latest
+          - macos-latest
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: '20'
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - if: ${{ ! startsWith(matrix.os, 'windows') }}
-        run: pip install setuptools
+          node-version: "24"
+      # The inkdrop-keyboard-layout native addon links against X11 + xkbfile, and
+      # the Electron renderer tests need a virtual display on Linux.
+      - name: Install X11 libraries (Linux only)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libx11-dev libxkbfile-dev xvfb
       - name: Install dependencies
-        run: npm i --openssl_fips=''
-      - name: Rebuild dependencies for Electron
-        run: npx electron-rebuild
+        run: npm i
+      - name: Lint
+        run: npm run lint
+      # Linux needs a virtual X display for the Electron renderer; other platforms
+      # run the tests directly.
+      - name: Run tests (Linux)
+        if: runner.os == 'Linux'
+        run: xvfb-run --auto-servernum npm test
       - name: Run tests
-        uses: coactions/setup-xvfb@v1
-        with:
-          run: npm test
+        if: runner.os != 'Linux'
+        run: npm test

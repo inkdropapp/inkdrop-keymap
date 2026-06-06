@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   KeyA: {
     unmodified: 'a',
     withShift: 'A'

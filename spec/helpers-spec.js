@@ -3,12 +3,11 @@
  * DS102: Remove unnecessary code created because of implicit returns
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
  */
-const {
+import {
   normalizeKeystrokes,
-  keystrokesMatch,
   isModifierKeyup,
   isKeyup
-} = require('../src/helpers')
+} from '../src/helpers.js'
 
 describe('.normalizeKeystrokes(keystrokes)', () =>
   it('parses and normalizes the keystrokes', function () {

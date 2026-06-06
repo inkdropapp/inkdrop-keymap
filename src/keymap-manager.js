@@ -1,22 +1,23 @@
-let KeymapManager
-const CSON = require('@inkdropapp/yeason')
-const fs = require('@craftzdog/fs-plus')
-const { isSelectorValid } = require('clear-cut')
-const path = require('path')
-const { Emitter, Disposable, CompositeDisposable } = require('event-kit')
-const { KeyBinding, MATCH_TYPES } = require('./key-binding')
-const CommandEvent = require('./command-event')
-const {
+import CSON from '@inkdropapp/yeason'
+import fs from '@craftzdog/fs-plus'
+import { isSelectorValid } from 'clear-cut'
+import path from 'node:path'
+import chokidar from 'chokidar'
+import { Emitter, Disposable } from 'event-kit'
+import { KeyBinding, MATCH_TYPES } from './key-binding.js'
+import CommandEvent from './command-event.js'
+import {
   normalizeKeystrokes,
   keystrokeForKeyboardEvent,
   isBareModifier,
   keydownEvent,
   keyupEvent,
   characterForKeyboardEvent,
-  keystrokesMatch,
   isKeyup
-} = require('./helpers')
-const PartialKeyupMatcher = require('./partial-keyup-matcher')
+} from './helpers.js'
+import PartialKeyupMatcher from './partial-keyup-matcher.js'
+
+let KeymapManager
 
 const Platforms = ['darwin', 'freebsd', 'linux', 'sunos', 'win32']
 const OtherPlatforms = Platforms.filter(
@@ -73,7 +74,7 @@ const OtherPlatforms = Platforms.filter(
 // the previous keystrokes are replayed. If there is ambiguity again during the
 // replay, the next longest bindings are disabled and the keystrokes are replayed
 // again.
-module.exports = KeymapManager = (function () {
+const KeymapManagerClass = (KeymapManager = (function () {
   KeymapManager = class KeymapManager {
     static initClass() {
       /*
@@ -449,7 +450,11 @@ module.exports = KeymapManager = (function () {
         )
         if (options != null ? options.watch : undefined) {
           const watch = () => this.watchKeymap(bindingsPath, options)
-          options.watchImmediately ? watch() : setTimeout(watch, 1000)
+          if (options.watchImmediately) {
+            watch()
+          } else {
+            setTimeout(watch, 1000)
+          }
         }
       }
 
@@ -472,10 +477,9 @@ module.exports = KeymapManager = (function () {
         this.watchSubscriptions[filePath] == null ||
         this.watchSubscriptions[filePath].disposed
       ) {
-        const reloadKeymap = (event, p) => {
+        const reloadKeymap = () => {
           this.reloadKeymap(filePath, options)
         }
-        const chokidar = require('chokidar')
         const watcher = chokidar.watch(filePath)
         watcher.on('all', reloadKeymap)
 
@@ -1116,7 +1120,9 @@ module.exports = KeymapManager = (function () {
   }
   KeymapManager.initClass()
   return KeymapManager
-})()
+})())
+
+export default KeymapManagerClass
 
 function __guardMethod__(obj, methodName, transform) {
   if (

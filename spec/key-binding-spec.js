@@ -1,4 +1,4 @@
-const { KeyBinding, MATCH_TYPES } = require('../src/key-binding')
+import { KeyBinding, MATCH_TYPES } from '../src/key-binding.js'
 
 describe('KeyBinding', () =>
   describe('.matchesKeystrokes(userKeystrokes)', function () {

@@ -1,14 +1,14 @@
-let KeyBinding
-const { calculateSpecificity, MODIFIERS, isKeyup } = require('./helpers')
+import { calculateSpecificity, isKeyup } from './helpers.js'
 
-const MATCH_TYPES = {
+let KeyBinding
+
+export const MATCH_TYPES = {
   EXACT: 'exact',
   PARTIAL: 'partial',
   PENDING_KEYUP: 'pendingKeyup'
 }
-module.exports.MATCH_TYPES = MATCH_TYPES
 
-module.exports.KeyBinding = KeyBinding = (function () {
+const KeyBindingClass = (KeyBinding = (function () {
   KeyBinding = class KeyBinding {
     static initClass() {
       this.currentIndex = 1
@@ -88,7 +88,6 @@ module.exports.KeyBinding = KeyBinding = (function () {
 
       let isPartialMatch = false
       let bindingRemainderContainsOnlyKeyups = true
-      const bindingKeystrokeIndex = 0
       for (var bindingKeystroke of Array.from(this.keystrokeArray)) {
         if (!isPartialMatch) {
           var doesMatch = matchesNextUserKeystroke(bindingKeystroke)
@@ -130,4 +129,6 @@ module.exports.KeyBinding = KeyBinding = (function () {
   }
   KeyBinding.initClass()
   return KeyBinding
-})()
+})())
+
+export { KeyBindingClass as KeyBinding }

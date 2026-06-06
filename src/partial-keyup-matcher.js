@@ -1,4 +1,4 @@
-module.exports = class PartialKeyupMatcher {
+export default class PartialKeyupMatcher {
   constructor() {
     this._pendingMatches = new Set()
   }
